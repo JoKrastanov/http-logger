@@ -10,8 +10,11 @@ const defaultColors: Record<number, FontColor> = {
     200: FontColor.Green,
 }
 
-export function httpLogger(options: LoggerOptions = { format: ':timestamp :method :url :status - :response-time ms', color: true, colorOptions: defaultColors }) {
+export function httpLogger(options: LoggerOptions) {
     return function (req: Request, res: Response, next: NextFunction) {
+        const logFormat = options.format ? options.format : ':timestamp :method :url :status - :response-time ms'
+        const logColor = options.color ? options.color : true
+        const colorOptions = options.colorOptions ? options.colorOptions : defaultColors
         const stream = process.stdout
         const startTime = process.hrtime();
 
@@ -19,14 +22,14 @@ export function httpLogger(options: LoggerOptions = { format: ':timestamp :metho
             const elapsedTime = process.hrtime(startTime);
             const responseTime = (elapsedTime[0] * 1e3 + elapsedTime[1] / 1e6).toFixed(2);
 
-            const log = options.format
+            const log = logFormat
                 .replace(':timestamp', new Date().toISOString())
                 .replace(':method', req.method)
                 .replace(':url', req.originalUrl)
                 .replace(':status', res.statusCode.toString())
                 .replace(':response-time', responseTime);
 
-            const coloredLog = options.color ? colorizeLog(log, res.statusCode, options.colorOptions) : log;
+            const coloredLog = logColor ? colorizeLog(log, res.statusCode, colorOptions) : log;
             stream.write(coloredLog + "\n");
         });
 
@@ -34,7 +37,7 @@ export function httpLogger(options: LoggerOptions = { format: ':timestamp :metho
     };
 }
 
-function colorizeLog(log: string, statusCode: number, colorOptions: Record<number, FontColor>): string {
+function colorizeLog(log: string, statusCode: number, colorOptions: Record<number | string, FontColor>): string {
     let coloredLog = log
     Object.keys(colorOptions).forEach(code => {
         if (statusCode >= parseInt(code)) {

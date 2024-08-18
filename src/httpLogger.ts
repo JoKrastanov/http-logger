@@ -13,7 +13,7 @@ const defaultColors: Record<number, FontColor> = {
 export function httpLogger(options: LoggerOptions) {
     return function (req: Request, res: Response, next: NextFunction) {
         const logFormat = options.format ? options.format : ':timestamp :method :url :status - :response-time ms'
-        const logColor = options.color ? options.color : true
+        const colorizeLogs = options.color !== undefined ? options.color : true
         const colorOptions = options.colorOptions ? options.colorOptions : defaultColors
         const stream = process.stdout
         const startTime = process.hrtime();
@@ -29,7 +29,7 @@ export function httpLogger(options: LoggerOptions) {
                 .replace(':status', res.statusCode.toString())
                 .replace(':response-time', responseTime);
 
-            const coloredLog = logColor ? colorizeLog(log, res.statusCode, colorOptions) : log;
+            const coloredLog = colorizeLogs ? colorizeLog(log, res.statusCode, colorOptions) : log;
             stream.write(coloredLog + "\n");
         });
 

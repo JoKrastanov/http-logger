@@ -1,17 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import { LoggerOptions } from "./loggerOptions";
-import { LogColor, LogColorKeys } from "./logColors";
+import { LogColor, FontColor } from "./logColors";
 
 const reset = "\x1b[0m";
-const defaultColors: Record<number, LogColorKeys> = {
-    500: "Red",
-    400: "Yellow",
-    300: "Blue",
-    200: "Green",
+const defaultColors: Record<number, FontColor> = {
+    500: FontColor.Red,
+    400: FontColor.Yellow,
+    300: FontColor.Blue,
+    200: FontColor.Green,
 }
 
-export function httpLogger(options: LoggerOptions = { format: ':timestamp :method :url :status - :response-time ms', stream: process.stdout, color: true, colorOptions: defaultColors }) {
+export function httpLogger(options: LoggerOptions = { format: ':timestamp :method :url :status - :response-time ms', color: true, colorOptions: defaultColors }) {
     return function (req: Request, res: Response, next: NextFunction) {
+        const stream = process.stdout
         const startTime = process.hrtime();
 
         res.on('finish', () => {
@@ -26,18 +27,19 @@ export function httpLogger(options: LoggerOptions = { format: ':timestamp :metho
                 .replace(':response-time', responseTime);
 
             const coloredLog = options.color ? colorizeLog(log, res.statusCode, options.colorOptions) : log;
-            options.stream.write(coloredLog + "\n");
+            stream.write(coloredLog + "\n");
         });
 
         next();
     };
 }
 
-function colorizeLog(log: string, statusCode: number, colorOptions: Record<number, LogColorKeys>): string {
+function colorizeLog(log: string, statusCode: number, colorOptions: Record<number, FontColor>): string {
     let coloredLog = log
     Object.keys(colorOptions).forEach(code => {
         if (statusCode >= parseInt(code)) {
-            coloredLog = `${LogColor[colorOptions[parseInt(code)] as LogColorKeys]}${log}${reset}`
+            const color = FontColor[colorOptions[parseInt(code)]] as keyof typeof FontColor
+            coloredLog = `${LogColor[color]}${log}${reset}`
         }
     })
     return coloredLog

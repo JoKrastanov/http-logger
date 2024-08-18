@@ -9,4 +9,15 @@ export const LogColor = {
     White: "\x1b[37m",
     Gray: "\x1b[90m",
 }
-export type LogColorKeys = keyof typeof LogColor;
+
+export enum FontColor {
+    Black,
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White,
+    Gray,
+}

@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { LoggerOptions } from "./loggerOptions";
 import { LogColor, FontColor } from "./logColors";
+import fs from "fs"
+import path from "path";
 
 // Used to reset the color of the application output
 const reset = "\x1b[0m";
@@ -15,7 +17,7 @@ const defaultColors: Record<number, FontColor> = {
 
 /**
 
- * Listens for any calls to an Express endpoint and logs the call with the provided options
+ * [httpLogger Listens for any calls to an Express endpoint and logs the call with the provided options]
 
  * @param  {LoggerOptions} options [custom log options]
 
@@ -27,6 +29,7 @@ export function httpLogger(options: LoggerOptions) {
         const logFormat = options.format ? options.format : ':timestamp :method :url :status - :response-time ms'
         const colorizeLogs = options.color !== undefined ? options.color : true
         const colorOptions = options.colorOptions ? options.colorOptions : defaultColors
+        const logOutFile = options.outFile ? options.outFile : 'logs.txt'
         const stream = process.stdout
         const startTime = process.hrtime();
 
@@ -42,6 +45,15 @@ export function httpLogger(options: LoggerOptions) {
                 .replace(':response-time', responseTime);
 
             const coloredLog = colorizeLogs ? colorizeLog(log, res.statusCode, colorOptions) : log;
+
+            if (options.outDir) {
+                validateOutDir(options.outDir)
+                fs.appendFile(path.join(options.outDir, logOutFile), log, "utf-8", function (err) {
+                    if (err) {
+                        throw err
+                    }
+                })
+            }
             stream.write(coloredLog + "\n");
         });
 
@@ -51,7 +63,22 @@ export function httpLogger(options: LoggerOptions) {
 
 /**
 
- * Checks the response status of the http call and returns the colored log based on the colorOptions
+ * [validateOutDir Checks if the provided output folder exists, if not it creates it]
+
+ * @param  {string} dir [output directory name]
+
+ * @return {function}       []
+
+ */
+function validateOutDir(dir: string) {
+    if (!fs.existsSync(dir)) {
+        return fs.mkdirSync(dir);
+    }
+}
+
+/**
+
+ * [colorizeLog Checks the response status of the http call and returns the colored log based on the colorOptions]
 
  * @param  {string} log [log text]
  * @param  {number} statusCode [http response code]

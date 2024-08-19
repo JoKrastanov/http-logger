@@ -1,3 +1,4 @@
+/** ANSI excape codes - used to add color to text in a CLI */
 export const LogColor = {
     Black: "\x1b[30m",
     Red: "\x1b[31m",
@@ -10,6 +11,7 @@ export const LogColor = {
     Gray: "\x1b[90m",
 }
 
+/** Supported color keys */
 export enum FontColor {
     Black,
     Red,

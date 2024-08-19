@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/JoKrastanov/http-logger"
   },
-  "keywords": ["express", "typescript", "javascript", "http", "log", "logger", "express-logger", "http-logger", "http-tracker", "http-track"],
+  "keywords": ["express", "typescript", "javascript", "http", "log", "logger", "express-logger", "http-logger", "http-tracker", "http-track", "middleware"],
   "author": "",
   "license": "ISC",
   "dependencies": {

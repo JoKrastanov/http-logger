@@ -35,9 +35,9 @@ Upon performing a GET request to `http://localhost:3000` a message will be displ
 
 ![Example GET request](./assets/example_request.png)
 
-## Customization
+## Customizing the logs
 
-### Formatting the logs
+### Parameters
 
 The logger has some simple parameters which can be shown or reordered:
 
@@ -55,6 +55,8 @@ You can change this by modifying the `format` parameter when creating the logger
 ```
 app.use(httpLogger({ format: ':timestamp :method' }));
 ```
+
+### Color
 
 The color of the Logs can also be modified. By default the package uses the following object:
 
@@ -106,10 +108,27 @@ app.use(httpLogger({ colorOptions: colors }));
 
 Disable colorful logs by simply providing the color parameter as false when initializing the logger: `app.use(httpLogger({ color: false }));`
 
->NOTE: If color is set to false, the colorOptions parameter gets ignored.
+> NOTE: If color is set to false, the colorOptions parameter gets ignored.
+
+### Output directory
+
+The logs can also be saved to an external txt file. In order to enable this functionality simply add the `outDir` parameter when initializing the logger. The `outDir` parameter is the path to the directory where the logs will be stored. You can also specify the `outFile` to specify a file name (defaults to `logs.txt`)
+
+> NOTE: If the provided `outDir` or `outFile` do not exist, the application will automatically create them!
+
+Example usage:
+
+```
+/* Stores data in the logs.txt file in the logs directory */
+app.use(httpLogger({ outDir: './logs' }));
+
+
+/* Creates a customLogs.txt file in the logs directory */
+app.use(httpLogger({ outDir: './logs', outFile: 'customLogs.txt' }));
+```
 
 ## Upcoming Features
 
+- Ability to automatically create new log files (daily, weekly, monthly, etc)
 - Further customization of the logs format
-- Ability to write the logs to external files
 - Ability to upload logs on third-party platforms

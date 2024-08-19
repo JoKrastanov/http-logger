@@ -8,7 +8,11 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/JoKrastanov/http-logger"
+  },
+  "keywords": ["express", "typescript", "javascript", "http", "log", "logger", "express-logger", "http-logger", "http-tracker", "http-track"],
   "author": "",
   "license": "ISC",
   "dependencies": {

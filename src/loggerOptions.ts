@@ -1,3 +1,4 @@
+import { ExportFreq } from './exportFreq';
 import { FontColor } from './logColors';
 
 
@@ -12,4 +13,6 @@ export interface LoggerOptions {
     outDir?: string 
     /** The output file where the logs will be recorded */
     outFile? : string
+    /** How often new log files should be created (null if never) */
+    exportFreq? : ExportFreq
 }

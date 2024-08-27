@@ -127,8 +127,22 @@ app.use(httpLogger({ outDir: './logs' }));
 app.use(httpLogger({ outDir: './logs', outFile: 'customLogs.txt' }));
 ```
 
+### LogFile creationm frequency
+
+The logs can be saved automatically to new files either daily, weekly or monthly. By default this feature is not enabled and all the logs will be stored in a single file.
+
+Example usage:
+
+```
+const { httpLogger, FontColor, ExportFreq } = require('./dist/index.js');
+
+/* Stores data in the logs.txt file in the logs directory */
+app.use(httpLogger({ outDir: './logs', exportFreq: ExportFreq.daily }));
+```
+
+Outputs the logs in the ./logs directory in a file called {year}{month}{day}-logs.txt
+
 ## Upcoming Features
 
-- Ability to automatically create new log files (daily, weekly, monthly, etc)
 - Further customization of the logs format
 - Ability to upload logs on third-party platforms

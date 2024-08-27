@@ -1,6 +1,5 @@
 A simple and lightweight HTTP Logger for an Express.js application.
 
-> NOTE: This package is still in development and has a number of upcoming features. You can read more about the features which will be added in the future in the **Upcoming Features** chapter at the bottom of the page
 
 ## Installation
 
@@ -143,6 +142,7 @@ app.use(httpLogger({ outDir: './logs', exportFreq: ExportFreq.daily }));
 Outputs the logs in the ./logs directory in a file called {year}{month}{day}-logs.txt
 
 ## Upcoming Features
+> NOTE: This package is still in development and has a number of upcoming features. You can read more about the features which will be added in the future: 
 
 - Further customization of the logs format
 - Ability to upload logs on third-party platforms
